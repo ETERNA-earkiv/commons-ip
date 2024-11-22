@@ -4,6 +4,14 @@ on:
     branches:
       - "development"
 
+permissions:
+  actions: write
+  attestations: write
+  checks: write
+  contents: write
+  deployments: write
+  packages: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
