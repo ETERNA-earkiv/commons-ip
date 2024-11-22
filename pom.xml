@@ -197,7 +197,7 @@
                                 <keyword>copyright</keyword>
                             </keywords>
                             <properties>
-                                <project.license.url>https://github.com/keeps/commons-ip</project.license.url>
+                                <project.license.url>https://github.com/ETERNA-earkiv/commons-ip</project.license.url>
                             </properties>
                             <includes>
                                 <include>**/*.java</include>
