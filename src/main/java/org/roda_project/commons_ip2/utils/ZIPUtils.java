@@ -54,8 +54,6 @@ public final class ZIPUtils {
    * @param destinationDirectory
    *          this path is only used if unzipping the SIP, otherwise source will
    *          be used
-   * @param ipFileExtension
-   *          file extension (e.g. .zip)
    */
   public static Path extractIPIfInZipFormat(final Path source, Path destinationDirectory) throws ParseException {
     Path ipFolderPath = destinationDirectory;
@@ -213,6 +211,8 @@ public final class ZIPUtils {
     ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zip.toFile()));
     ZipEntry zipEntry = zipInputStream.getNextEntry();
 
+    Path normalizedDest = dest.normalize();
+
     if (zipEntry == null) {
       // No entries in ZIP
       zipInputStream.close();
@@ -223,7 +223,11 @@ public final class ZIPUtils {
         if (Utils.systemIsWindows()) {
           entryName = entryName.replaceAll("/", "\\\\");
         }
-        Path newFile = dest.resolve(entryName);
+        Path newFile = dest.resolve(entryName).normalize();
+
+        if (!newFile.startsWith(normalizedDest)) {
+          throw new SecurityException("Invalid file path: path traversal attempt detected.");
+        }
 
         if (zipEntry.isDirectory()) {
           Files.createDirectories(newFile);
