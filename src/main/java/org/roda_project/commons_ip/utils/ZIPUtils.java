@@ -211,8 +211,6 @@ public final class ZIPUtils {
     ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zip.toFile()));
     ZipEntry zipEntry = zipInputStream.getNextEntry();
 
-    Path normalizedDest = dest.normalize();
-
     if (zipEntry == null) {
       // No entries in ZIP
       zipInputStream.close();
@@ -225,8 +223,8 @@ public final class ZIPUtils {
         }
         Path newFile = dest.resolve(entryName).normalize();
 
-        if (!newFile.startsWith(normalizedDest)) {
-          throw new SecurityException("Invalid file path: path traversal attempt detected.");
+        if (!newFile.startsWith(dest.normalize())) {
+          throw new IOException("Bad zip entry: " + entryName);
         }
 
         if (zipEntry.isDirectory()) {
