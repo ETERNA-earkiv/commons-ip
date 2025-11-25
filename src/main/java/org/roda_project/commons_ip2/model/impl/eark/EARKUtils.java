@@ -779,6 +779,16 @@ public class EARKUtils {
       MdRef mdRef = mdSecType.getMdRef();
       if (mdRef != null) {
         String href = Utils.extractedRelativePathFromHref(mdRef);
+
+        Path hrefPath = Path.of(href).normalize();
+        Path descriptiveMetadataPath = Path.of(IPConstants.METADATA, metadataType);
+
+        // Check if current dmdSec points to a file in metadata/descriptive, continue otherwise for example for files
+        // in metadata/other
+        if (!hrefPath.startsWith(descriptiveMetadataPath)) {
+          continue;
+        }
+
         Path filePath = basePath.resolve(href);
         if (Files.exists(filePath)) {
           List<String> fileRelativeFolders = Utils
