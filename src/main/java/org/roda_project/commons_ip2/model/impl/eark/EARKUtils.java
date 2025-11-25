@@ -905,7 +905,7 @@ public class EARKUtils {
             filePath);
           IPMetadata ipMetadata = new IPMetadata(metadataFile.get());
           ipMetadata.setCreateDate(mdRef.getCREATED());
-          ipMetadata.setMetadataType(MetadataType.MetadataTypeEnum.valueOf(mdRef.getMDTYPE()));
+          ipMetadata.setMetadataType(MetadataType.MetadataTypeEnum.fromType(mdRef.getMDTYPE()));
           ipMetadata.setId(mdRef.getID());
           addMetadata(ip, representation, ipMetadata, metadataType);
         }
@@ -1032,7 +1032,7 @@ public class EARKUtils {
       } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
         IPMetadata preservationMetadata = new IPMetadata(metadataFile.get());
         preservationMetadata.setCreateDate(mdRef.getCREATED());
-        preservationMetadata.setMetadataType(MetadataType.MetadataTypeEnum.valueOf(mdRef.getMDTYPE()));
+        preservationMetadata.setMetadataType(MetadataType.MetadataTypeEnum.fromType(mdRef.getMDTYPE()));
         preservationMetadata.setId(mdRef.getID());
         if (representation == null) {
           ip.addPreservationMetadata(preservationMetadata);
@@ -1042,7 +1042,7 @@ public class EARKUtils {
       } else if (IPConstants.RIGHTS.equalsIgnoreCase(metadataType)) {
         IPMetadata rightsMetadata = new IPMetadata(metadataFile.get());
         rightsMetadata.setCreateDate(mdRef.getCREATED());
-        rightsMetadata.setMetadataType(MetadataType.MetadataTypeEnum.valueOf(mdRef.getMDTYPE()));
+        rightsMetadata.setMetadataType(MetadataType.MetadataTypeEnum.fromType(mdRef.getMDTYPE()));
         rightsMetadata.setId(mdRef.getID());
         if (representation == null) {
           ip.addRightsMetadata(rightsMetadata);
