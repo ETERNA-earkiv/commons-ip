@@ -41,6 +41,10 @@ public class MetadataType implements Serializable {
       return type;
     }
 
+    public static MetadataTypeEnum fromType(final String type) {
+        return MetadataTypeEnum.typeToEnum.getOrDefault(type, MetadataTypeEnum.OTHER);
+    }
+
     @Override
     public String toString() {
       return type;

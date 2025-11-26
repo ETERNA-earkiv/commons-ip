@@ -1,4 +1,77 @@
 # Changelog
+## 2.10.1 (2025-11-26)
+### Changes
+
+* Fix problems with incorrect parsing of METS metadata types
+
+
+## 2.10.0 (2025-05-13)
+### New features
+
+* Added support for other administrative metadata (technical, source and rights) #326
+
+### Enhancements
+
+* Improve E-ARK SIP parser #329
+
+### Security
+
+* Several dependency major upgrades to fix security vulnerabilities
+
+
+## 2.9.3 (2025-03-13)
+### Changes
+
+* Adding additional metadata to maven project for Maven Central publishing requirements
+
+## 2.9.2 (2025-03-13)
+### Changes
+
+* Fixing publishing to Maven Central
+
+
+## 2.9.1 (2025-03-13)
+### Changes
+
+* Publishing to Maven Central
+
+
+
+## 2.9.0 (2025-03-13)
+### Changed
+
+* Changed artifact group from org.roda-project to org.roda-community and published to Maven Central
+
+### Security
+
+* Upgrade com.fasterxml.jackson.core:jackson-core from 2.17.2 to 2.18.2 by @luis100 in #307
+* Upgrade ch.qos.logback:logback-classic from 1.5.13 to 1.5.15 by @luis100 in #308 Upgrade ch.qos.logback:logback-classic from 1.5.13 to 1.5.15 by @luis100 in #308
+* Upgrade org.apache.commons:commons-lang3 from 3.15.0 to 3.17.0 by @luis100 in #309
+* Upgrade commons-beanutils:commons-beanutils from 1.9.4 to 1.10.0 by @luis100 in #310
+* Upgrade commons-io:commons-io from 2.17.0 to 2.18.0 by @luis100 in #311
+* Bump actions/cache from 3 to 4 by @dependabot in #313
+* Bump softprops/action-gh-release from 1 to 2 by @dependabot in #314
+* Bump actions/checkout from 2 to 4 by @dependabot in #315
+* Bump s4u/setup-maven-action from 1.7.0 to 1.18.0 by @dependabot in #316
+* Bump github/codeql-action from 1 to 3 by @dependabot in #317
+* Potential fix for code scanning alert no. 2: Arbitrary file access during archive extraction ("Zip Slip") by @luis100 in #318
+* Potential fix for code scanning alert no. 1: Arbitrary file access during archive extraction ("Zip Slip") by @luis100 in #319
+
+
+## 2.8.2 (2024-11-27)
+### Bug fixes:
+
+* String concatenation causes double PathSeparators in regex. #304
+* SIP fails validation when parsing an unzipped sip #298 (Thanks to @JohannesKarlsen99)
+
+### Enhancements:
+
+* Add options to the write strategy for configuring the creation of SipId folder inside the ZIP 
+* Add dependencies for CITS-ERMS and CITS-SIARD
+
+### Security:
+* Fixed path traversal vulnerability
+* Several dependency major upgrades to fix security vulnerabilities
 
 ## 2.8.1 (2024-11-05)
 ### Bug fixes:

@@ -123,7 +123,10 @@ public class EARKSIP extends SIP {
           earkUtils.preProcessStructMap(metsWrapper, structMap);
           earkUtils.processDescriptiveMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
           earkUtils.processOtherMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
-          earkUtils.processPreservationMetadata(metsWrapper, sip, LOGGER, null, sip.getBasePath());
+          earkUtils.processPreservationMetadata(metsWrapper, sip, null, sip.getBasePath());
+          earkUtils.processTechnicalMetadata(metsWrapper, sip, null, sip.getBasePath());
+          earkUtils.processSourceMetadata(metsWrapper, sip, null, sip.getBasePath());
+          earkUtils.processRightsMetadata(metsWrapper, sip, null, sip.getBasePath());
           earkUtils.processRepresentations(metsWrapper, sip, LOGGER);
           earkUtils.processSchemasMetadata(metsWrapper, sip, sip.getBasePath());
           earkUtils.processDocumentationMetadata(metsWrapper, sip, sip.getBasePath());
@@ -147,6 +150,20 @@ public class EARKSIP extends SIP {
     return build(writeStrategy, false);
   }
 
+  /**
+   * Builds a SIP.
+   *
+   * @param destinationDirectory
+   *          the {@link Path} where the SIP should be build.
+   * @param onlyManifest
+   *          build only the manifest file? (<strong>this parameter is
+   *          ignored</strong>).
+   * @return the {@link Path}.
+   * @throws IPException
+   *           if some error occurs.
+   * @throws InterruptedException
+   *           if some error occurs.
+   */
   @Override
   public Path build(WriteStrategy writeStrategy, final boolean onlyManifest)
     throws IPException, InterruptedException {
@@ -186,18 +203,31 @@ public class EARKSIP extends SIP {
 
       boolean isMetadataOther = (this.getOtherMetadata() != null && !this.getOtherMetadata().isEmpty());
       boolean isMetadata = ((this.getDescriptiveMetadata() != null && !this.getDescriptiveMetadata().isEmpty())
-        || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty()));
+        || (this.getPreservationMetadata() != null && !this.getPreservationMetadata().isEmpty())
+        || (this.getTechnicalMetadata() != null && !this.getTechnicalMetadata().isEmpty())
+        || (this.getSourceMetadata() != null && !this.getSourceMetadata().isEmpty())
+        || (this.getRightsMetadata() != null && !this.getRightsMetadata().isEmpty()));
       boolean isDocumentation = (this.getDocumentation() != null && !this.getDocumentation().isEmpty());
       boolean isSchemas = (this.getSchemas() != null && !this.getSchemas().isEmpty());
       boolean isRepresentations = (this.getRepresentations() != null && !this.getRepresentations().isEmpty());
+      MetsWrapper mainMETSWrapper;
 
-      MetsWrapper mainMETSWrapper = metsCreator.generateMETS(StringUtils.join(this.getIds(), " "),
-        this.getDescription(), this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null,
-        this.getHeader(), this.getType(), this.getContentType(), this.getContentInformationType(), isMetadata,
-        isMetadataOther, isSchemas, isDocumentation, false, isRepresentations, false);
-
+      if (this.getType().equals("SIARD")) {
+        mainMETSWrapper = metsCreator.generateMetsSiard(StringUtils.join(this.getIds(), " "), this.getDescription(),
+          this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null, this.getHeader(), this.getType(),
+          this.getContentType(), this.getContentInformationType(), isMetadata, isMetadataOther, isSchemas,
+          isDocumentation, false, isRepresentations, false);
+      } else {
+        mainMETSWrapper = metsCreator.generateMETS(StringUtils.join(this.getIds(), " "), this.getDescription(),
+          this.getProfile(), true, Optional.ofNullable(this.getAncestors()), null, this.getHeader(), this.getType(),
+          this.getContentType(), this.getContentInformationType(), isMetadata, isMetadataOther, isSchemas,
+          isDocumentation, false, isRepresentations, false);
+      }
       earkUtils.addDescriptiveMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getDescriptiveMetadata(), null);
       earkUtils.addPreservationMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getPreservationMetadata(), null);
+      earkUtils.addTechnicalMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getTechnicalMetadata(), null);
+      earkUtils.addSourceMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getSourceMetadata(), null);
+      earkUtils.addRightsMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getRightsMetadata(), null);
       earkUtils.addOtherMetadataToZipAndMETS(zipEntries, mainMETSWrapper, getOtherMetadata(), null);
       earkUtils.addRepresentationsToZipAndMETS(this, getRepresentations(), zipEntries, mainMETSWrapper, buildDir,
         sipType);
@@ -212,7 +242,6 @@ public class EARKSIP extends SIP {
       throw e;
     } finally {
       ModelUtils.deleteBuildDir(buildDir);
-      notifySipBuildPackagingEnded();
     }
   }
 
