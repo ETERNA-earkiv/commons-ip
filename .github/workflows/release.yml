@@ -39,6 +39,10 @@ jobs:
         run: mvn --batch-mode clean package -P cli
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy Jar
+        run:  mvn --batch-mode deploy -Djacoco.skip=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Release to GitHub
         uses: softprops/action-gh-release@v2
         with:
