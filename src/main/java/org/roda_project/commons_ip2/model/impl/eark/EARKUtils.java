@@ -779,6 +779,16 @@ public class EARKUtils {
       MdRef mdRef = mdSecType.getMdRef();
       if (mdRef != null) {
         String href = Utils.extractedRelativePathFromHref(mdRef);
+
+        Path hrefPath = Path.of(href).normalize();
+        Path descriptiveMetadataPath = Path.of(IPConstants.METADATA, metadataType);
+
+        // Check if current dmdSec points to a file in metadata/descriptive, continue otherwise for example for files
+        // in metadata/other
+        if (!hrefPath.startsWith(descriptiveMetadataPath)) {
+          continue;
+        }
+
         Path filePath = basePath.resolve(href);
         if (Files.exists(filePath)) {
           List<String> fileRelativeFolders = Utils
@@ -895,7 +905,7 @@ public class EARKUtils {
             filePath);
           IPMetadata ipMetadata = new IPMetadata(metadataFile.get());
           ipMetadata.setCreateDate(mdRef.getCREATED());
-          ipMetadata.setMetadataType(MetadataType.MetadataTypeEnum.valueOf(mdRef.getMDTYPE()));
+          ipMetadata.setMetadataType(MetadataType.MetadataTypeEnum.fromType(mdRef.getMDTYPE()));
           ipMetadata.setId(mdRef.getID());
           addMetadata(ip, representation, ipMetadata, metadataType);
         }
@@ -1022,7 +1032,7 @@ public class EARKUtils {
       } else if (IPConstants.PRESERVATION.equalsIgnoreCase(metadataType)) {
         IPMetadata preservationMetadata = new IPMetadata(metadataFile.get());
         preservationMetadata.setCreateDate(mdRef.getCREATED());
-        preservationMetadata.setMetadataType(MetadataType.MetadataTypeEnum.valueOf(mdRef.getMDTYPE()));
+        preservationMetadata.setMetadataType(MetadataType.MetadataTypeEnum.fromType(mdRef.getMDTYPE()));
         preservationMetadata.setId(mdRef.getID());
         if (representation == null) {
           ip.addPreservationMetadata(preservationMetadata);
@@ -1032,7 +1042,7 @@ public class EARKUtils {
       } else if (IPConstants.RIGHTS.equalsIgnoreCase(metadataType)) {
         IPMetadata rightsMetadata = new IPMetadata(metadataFile.get());
         rightsMetadata.setCreateDate(mdRef.getCREATED());
-        rightsMetadata.setMetadataType(MetadataType.MetadataTypeEnum.valueOf(mdRef.getMDTYPE()));
+        rightsMetadata.setMetadataType(MetadataType.MetadataTypeEnum.fromType(mdRef.getMDTYPE()));
         rightsMetadata.setId(mdRef.getID());
         if (representation == null) {
           ip.addRightsMetadata(rightsMetadata);
