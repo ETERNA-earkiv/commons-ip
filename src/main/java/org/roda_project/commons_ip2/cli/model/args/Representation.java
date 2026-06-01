@@ -11,8 +11,12 @@ public class Representation {
   @CommandLine.Option(names = {
     "--representation-data"}, required = true, split = ",", paramLabel = "<path>", description = "Path to representation file")
   List<String> representationData;
-  @CommandLine.Option(names = "--representation-type", paramLabel = "<type>", description = "Representation type")
-  String representationType;
+  @CommandLine.Option(names = "--representation-content-type", paramLabel = "<type>", description = "Representation content type")
+  String representationContentType;
+  @CommandLine.Option(names = "--representation-content-information-type", paramLabel = "<type>", description = "Representation content information type")
+  String representationContentInformationType;
+  @CommandLine.Option(names = "--representation-status", paramLabel = "<status>", description = "Representation status", defaultValue = "ORIGINAL")
+  String representationStatus;
   @CommandLine.Option(names = "--representation-id", paramLabel = "<id>", description = "Representation identifier. If not set a default value of rep<number> will be used")
   String representationId;
 
@@ -20,8 +24,16 @@ public class Representation {
     return representationData;
   }
 
-  public String getRepresentationType() {
-    return representationType;
+  public String getRepresentationContentType() {
+    return representationContentType;
+  }
+
+  public String getRepresentationContentInformationType() {
+    return representationContentInformationType;
+  }
+
+  public String getRepresentationStatus() {
+    return representationStatus;
   }
 
   public String getRepresentationId() {

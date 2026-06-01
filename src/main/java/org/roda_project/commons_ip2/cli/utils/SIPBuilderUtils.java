@@ -15,11 +15,13 @@ import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
 import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
 import org.roda_project.commons_ip2.cli.model.enums.WriteStrategyEnum;
+import org.roda_project.commons_ip2.model.IPContentInformationType;
 import org.roda_project.commons_ip2.model.IPContentType;
 import org.roda_project.commons_ip2.model.IPDescriptiveMetadata;
 import org.roda_project.commons_ip2.model.IPFile;
 import org.roda_project.commons_ip2.model.IPRepresentation;
 import org.roda_project.commons_ip2.model.MetadataType;
+import org.roda_project.commons_ip2.model.RepresentationStatus;
 import org.roda_project.commons_ip2.model.SIP;
 import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.FolderWriteStrategyFactory;
 import org.roda_project.commons_ip2.model.impl.eark.out.writers.factory.ZipWriteStrategyFactory;
@@ -79,11 +81,18 @@ public class SIPBuilderUtils {
     final IPRepresentation representation = new IPRepresentation(id);
     sip.addRepresentation(representation);
 
-    if (representationGroup.getRepresentation().getRepresentationType() != null) {
+    if (representationGroup.getRepresentation().getRepresentationContentType() != null) {
       final IPContentType ipContentType = getIPContentType(
-        representationGroup.getRepresentation().getRepresentationType());
+        representationGroup.getRepresentation().getRepresentationContentType());
       representation.setContentType(ipContentType);
     }
+
+    if (representationGroup.getRepresentation().getRepresentationContentInformationType() != null) {
+      representation.setContentInformationType(
+        getIPContentInformationType(representationGroup.getRepresentation().getRepresentationContentInformationType()));
+    }
+
+    representation.setStatus(getRepresentationStatus(representationGroup.getRepresentation().getRepresentationStatus()));
 
     for (String representationData : representationGroup.getRepresentation().getRepresentationData()) {
       final Path dataPath = Paths.get(representationData);
@@ -129,7 +138,18 @@ public class SIPBuilderUtils {
         return new IPContentType(ipContentTypeEnum);
       }
     }
-    return new IPContentType(IPContentType.IPContentTypeEnum.MIXED);
+    return new IPContentType(representationType);
+  }
+
+  public static IPContentInformationType getIPContentInformationType(final String contentInformationType) {
+    return new IPContentInformationType(contentInformationType);
+  }
+
+  public static RepresentationStatus getRepresentationStatus(final String representationStatus) {
+    if (representationStatus == null) {
+      return RepresentationStatus.getORIGINAL();
+    }
+    return new RepresentationStatus(representationStatus);
   }
 
   public static void addMetadataGroupsToSIP(SIP sip, final List<MetadataGroup> metadataGroups) throws IPException {
@@ -164,7 +184,7 @@ public class SIPBuilderUtils {
       metadataTypeEnum, version);
     sip.addDescriptiveMetadata(descriptiveMetadata);
     String metadataSchema = metadataGroup.getMetadata().getMetadataSchema();
-    if(metadataSchema != null){
+    if (metadataSchema != null) {
       sip.addSchema(new IPFile(Paths.get(metadataSchema)));
     }
   }

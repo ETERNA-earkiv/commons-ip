@@ -1,4 +1,20 @@
 # Changelog
+## 2.11.2 (2026-06-01)
+### Enhancements
+
+* Remove logback configuration file from Maven release (already excluded in our fork)
+* Add CLI arguments to set representation content type, content information type, and representation status
+
+### Security
+
+* Upgrade com.fasterxml.jackson.core:jackson-core from 2.18.3 to 2.20.1
+* Upgrade ch.qos.logback:logback-classic from 1.5.18 to 1.5.21
+* Upgrade commons-io:commons-io from 2.18.0 to 2.21.0
+* Upgrade org.apache.commons:commons-lang3 from 3.17.0 to 3.20.0
+* Upgrade jakarta.xml.bind:jakarta.xml.bind-api from 4.0.2 to 4.0.4
+* Upgrade org.glassfish.jaxb:jaxb-runtime from 4.0.5 to 4.0.6
+
+
 ## 2.10.1 (2025-11-26)
 ### Changes
 
